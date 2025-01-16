@@ -75,5 +75,35 @@ abstract class user {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     abstract public function getSpecificData();
+    public function getRole() {
+        return $this->role;
+    }
+    public function getStatus() {
+        return $this->status;
+    }
 
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getUsername() {
+        return $this->username;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+    public function getPassword() {
+        return $this->password;
+    }
+    
+    public function setEmail($email) {
+        $this->email =$email;
+    }
+    public function setPassword() {
+        $this->email =$email;
+    }
+    public function setUsername() {
+        $this->usename =$username;
+    }
 }

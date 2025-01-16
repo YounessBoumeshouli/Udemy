@@ -39,4 +39,11 @@ abstract class user {
             echo "Error: " . $e->getMessage();
         }   
     }
+    public function read($id) {
+        $sql = "SELECT * FROM users WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

@@ -46,4 +46,12 @@ abstract class user {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public function update($id, $data) {
+        $sql = "UPDATE users SET username = :username, email = :email WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':username', $data['username']);
+        $stmt->bindParam(':email', $data['email']);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
 }

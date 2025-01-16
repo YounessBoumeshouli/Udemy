@@ -74,4 +74,6 @@ abstract class user {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    abstract public function getSpecificData();
+
 }

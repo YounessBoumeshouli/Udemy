@@ -1,12 +1,15 @@
 <?php
-
-abstract class user {
+require_once 'CrudInterface.php';
+require_once 'UserInterface.php';
+abstract class User implements CrudInterface, UserInterface {
     protected $db;
     protected $id;
     protected $username;
     protected $email;
     protected $role;
-
+    protected $password;
+    protected $status;
+    
     public function __construct($db, $userData = null) {
         $this->db = $db;
         if ($userData) {
@@ -39,6 +42,7 @@ abstract class user {
             echo "Error: " . $e->getMessage();
         }   
     }
+
     public function read($id) {
         $sql = "SELECT * FROM users WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -46,6 +50,7 @@ abstract class user {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
     public function update($id, $data) {
         $sql = "UPDATE users SET username = :username, email = :email WHERE id = :id";
         $stmt = $this->db->prepare($sql);
@@ -54,12 +59,26 @@ abstract class user {
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+
     public function delete($id) {
         $sql = "DELETE FROM users WHERE id_user = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+    public function activate($id) {
+        $sql = "UPDATE public.users SET status = 'ACCEPTED'  where id_user = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+    public function suspend($id) {
+        $sql = "UPDATE public.users SET status = 'BANED'  where id_user = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
+
     public function getAll() {
         $sql = "SELECT * FROM users WHERE role <> :role";
         $stmt = $this->db->prepare($sql);
@@ -67,6 +86,7 @@ abstract class user {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function getUserbyId($id) {
         $sql = "SELECT * FROM users where id_user = :id_user";
         $stmt = $this->db->prepare($sql);
@@ -74,7 +94,8 @@ abstract class user {
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    abstract public function getSpecificData();
+
+
     public function getRole() {
         return $this->role;
     }
@@ -106,4 +127,9 @@ abstract class user {
     public function setUsername() {
         $this->usename =$username;
     }
+
+    // Additional methods
+
+    abstract public function getSpecificData();
 }
+

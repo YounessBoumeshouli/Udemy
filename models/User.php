@@ -67,4 +67,11 @@ abstract class user {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getUserbyId($id) {
+        $sql = "SELECT * FROM users where id_user = :id_user";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_user', $this->role);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

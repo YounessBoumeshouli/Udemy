@@ -60,4 +60,11 @@ abstract class user {
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
+    public function getAll() {
+        $sql = "SELECT * FROM users WHERE role <> :role";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':role', $this->role);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

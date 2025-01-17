@@ -12,4 +12,33 @@ abstract class Course implements CrudInterface, DisplayableInterface {
     public function __construct($db) {
         $this->db = $db;
     }
+    public function create($data) {
+        $sql = "INSERT INTO courses (title, description, teacher_id, category_id,type,document_url) VALUES (:title, :description, :teacher_id, :category_id,:type,:document_url)  returning    id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':title', $data['title']);
+        $stmt->bindParam(':description', $data['description']);
+        $stmt->bindParam(':teacher_id', $data['teacher_id']);
+        $stmt->bindParam(':category_id', $data['category_id']);
+        $stmt->bindParam(':type', $data['content_type']);
+        $stmt->bindParam(':document_url', $data['document_url']);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function read($id) {
+        $sql = "SELECT * FROM courses WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function update($id, $data) 
+    {
+        $sql = "UPDATE courses SET title = :title, description = :description, category_id = :category_id WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':title', $data['title']);
+        $stmt->bindParam(':description', $data['description']);
+        $stmt->bindParam(':category_id', $data['category_id']);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
 }
